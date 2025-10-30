@@ -1,6 +1,8 @@
 import multer from "multer";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
 import cloudinary from "../config/cloudinary.config.js";
+import { v4 as uuidv4 } from 'uuid';
+
 
 const storage = new CloudinaryStorage({
   cloudinary,
@@ -8,17 +10,15 @@ const storage = new CloudinaryStorage({
     let folder = "cards";
     let resource_type = "image";
 
-    // ✅ handle MP3 and other audio files
     if (file.fieldname === "song") {
-      resource_type = "auto"; // let Cloudinary detect (audio/video)
+      resource_type = "auto"; // Cloudinary detects type automatically
       folder = "songs";
     }
 
-    return {
+   return {
       folder,
       resource_type,
-      public_id: file.originalname.split(".")[0],
-   //   format: file.mimetype.split("/")[1],
+      public_id: `${file.originalname.split(".")[0]}_${uuidv4()}`, // unique ID
     };
   },
 });
